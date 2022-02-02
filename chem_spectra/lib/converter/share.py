@@ -41,6 +41,8 @@ def parse_params(params):
     fname = '.'.join(fname)
     waveLength = params.get('waveLength')
     waveLength = json.loads(waveLength) if waveLength else default_wavelength
+    comparisons = params.get('comparisons')
+    comparisons = json.loads(comparisons) if comparisons else None
 
     try:
         if select_x and float(select_x) != 0.0 and ref_name != '- - -':
@@ -63,6 +65,7 @@ def parse_params(params):
         'ext': ext,
         'fname': fname,
         'waveLength': waveLength,
+        'comparisons': comparisons
     }
 
 

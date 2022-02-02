@@ -274,3 +274,17 @@ class BaseComposer:
             return table
         else:
             return []
+
+    def gen_overlay_spectra(self):
+        comparisons = self.core.params['comparisons']
+        if (comparisons is not None):
+            overlay_spectra = []
+            for spectra in comparisons:
+                data = spectra['data']
+                xs, ys = [], []
+                for point in data:
+                    xs.append(point['x'])
+                    ys.append(point['y'])
+                overlay_spectra.append({'xs': xs, 'ys':ys})
+            return overlay_spectra
+        return None

@@ -64,6 +64,8 @@ def extract_params(request):
     fname = parse_fname(request)
     simulatenrm = bool(request.form.get('simulatenrm', default=False))
     waveLength = request.form.get('wave_length', default=None)
+    comparisons = request.form.get('comparisons', default=None)
+
 
     params = {
         'peaks_str': request.form.get('peaks_str', default=None),
@@ -81,7 +83,8 @@ def extract_params(request):
         'multiplicity': multiplicity,
         'fname': fname,
         'simulatenrm': simulatenrm,
-        'waveLength': waveLength
+        'waveLength': waveLength,
+        'comparisons': comparisons
     }
     has_params = (
         params.get('peaks_str') or

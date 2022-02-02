@@ -195,6 +195,13 @@ class NIComposer(BaseComposer):
             y_min - h * 0.2,
             y_max + h * 0.2,
         )
+
+        # PLOT comparisions
+        comparisons = self.gen_overlay_spectra()
+        if (comparisons is not None):
+            for spectra in comparisons:
+                plt.plot(spectra['xs'], spectra['ys'], '--', alpha=0.5)
+
         # PLOT peaks
         faktor = self.__fakto()
         path_data = [
