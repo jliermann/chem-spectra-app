@@ -32,6 +32,7 @@ class JcampNIConverter:  # nmr & IR
         self.is_xrd = base.is_xrd
         self.is_uv_vis = base.is_uv_vis
         self.is_hplc_uv_vis = base.is_hplc_uv_vis
+        self.is_cyclic_volta = base.is_cyclic_volta
         self.non_nmr = base.non_nmr
         self.ncl = base.ncl
         self.is_dept = base.is_dept
@@ -84,6 +85,8 @@ class JcampNIConverter:  # nmr & IR
             return THRESHOLD_TGA
         elif 'X-RAY DIFFRACTION' == dt:
             return THRESHOLD_XRD
+        elif 'CYCLIC VOLTAMMETRY' == dt:
+            return THRESHOLD_XRD
         return 0.5
 
     def __index_target(self):
@@ -92,7 +95,8 @@ class JcampNIConverter:  # nmr & IR
             'INFRARED SPECTRUM', 'RAMAN SPECTRUM',
             'MASS SPECTRUM', 'UV/VIS SPECTRUM', 'UV-VIS',
             'HPLC UV-VIS', 'HPLC UV/VIS SPECTRUM',
-            'THERMOGRAVIMETRIC ANALYSIS', 'X-RAY DIFFRACTION'
+            'THERMOGRAVIMETRIC ANALYSIS', 'X-RAY DIFFRACTION',
+            'CYCLIC VOLTAMMETRY'
         ]
         for tp in target_topics:
             if tp in self.datatypes:
