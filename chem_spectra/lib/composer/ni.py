@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import matplotlib.path as mpath  # noqa: E402
 import re # noqa: E402
 import numpy as np # noqa: E402
+from matplotlib import ticker # noqa: E402
 
 from chem_spectra.lib.composer.base import (  # noqa: E402
     extrac_dic, calc_npoints, BaseComposer
@@ -184,6 +185,7 @@ class NIComposer(BaseComposer):
     def tf_img(self):
         plt.rcParams['figure.figsize'] = [16, 9]
         plt.rcParams['font.size'] = 14
+
         # PLOT data
         plt.plot(self.core.xs, self.core.ys)
         x_max, x_min = self.core.boundary['x']['max'], self.core.boundary['x']['min']
@@ -203,22 +205,34 @@ class NIComposer(BaseComposer):
         ]
         codes, verts = zip(*path_data)
         marker = mpath.Path(verts, codes)
+        x_peaks = []
+        y_peaks = []
         if self.core.edit_peaks:
-            plt.plot(
-                self.core.edit_peaks['x'],
-                self.core.edit_peaks['y'],
-                'rd',
-                marker=marker,
-                markersize=50,
-            )
+            x_peaks = self.core.edit_peaks['x']
+            y_peaks = self.core.edit_peaks['y']
         elif self.core.auto_peaks:
-            plt.plot(
-                self.core.auto_peaks['x'],
-                self.core.auto_peaks['y'],
-                'rd',
-                marker=marker,
-                markersize=50,
-            )
+            x_peaks = self.core.auto_peaks['x']
+            y_peaks = self.core.auto_peaks['y']
+
+        plt.plot(
+            x_peaks,
+            y_peaks,
+            'rd',
+            marker=marker,
+            markersize=50,
+        )
+        
+        if self.core.is_cyclic_volta:
+            formatter = ticker.ScalarFormatter(useMathText=True)
+            formatter.set_scientific(True)
+            formatter.set_powerlimits((-1,1))
+            plt.gca().yaxis.set_major_formatter(formatter)
+
+            #display x value of peak for cyclic voltammetry
+            for i in range(len(x_peaks)):
+                x_pos = x_peaks[i]
+                y_pos = y_peaks[i] + h * 0.1
+                plt.text(x_pos, y_pos, str(x_pos))
 
         # ----- PLOT integration -----
         refShift, refArea = self.refShift, self.refArea
