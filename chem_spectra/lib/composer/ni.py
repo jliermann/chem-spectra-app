@@ -232,7 +232,8 @@ class NIComposer(BaseComposer):
             for i in range(len(x_peaks)):
                 x_pos = x_peaks[i]
                 y_pos = y_peaks[i] + h * 0.1
-                plt.text(x_pos, y_pos, str(x_pos))
+                peak_label = 'x: {x}, y: {y}'.format(x=x_pos, y=y_peaks[i])
+                plt.text(x_pos, y_pos, peak_label)
 
         # ----- PLOT integration -----
         refShift, refArea = self.refShift, self.refArea
