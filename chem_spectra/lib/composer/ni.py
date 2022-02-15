@@ -228,11 +228,19 @@ class NIComposer(BaseComposer):
             formatter.set_powerlimits((-1,1))
             plt.gca().yaxis.set_major_formatter(formatter)
 
+            arr_max_x_indices = np.where(self.core.xs == x_max)
+            if (arr_max_x_indices[0]):
+                for idx in arr_max_x_indices[0]:
+                    x_pos = self.core.xs[idx]
+                    y_pos = self.core.ys[idx]
+                    limit_label = 'x: {x}\ny: {y}'.format(x=x_pos, y=y_pos)
+                    plt.text(x_pos, y_pos, limit_label)
+
             #display x value of peak for cyclic voltammetry
             for i in range(len(x_peaks)):
                 x_pos = x_peaks[i]
                 y_pos = y_peaks[i] + h * 0.1
-                peak_label = 'x: {x}, y: {y}'.format(x=x_pos, y=y_peaks[i])
+                peak_label = 'x: {x}\ny: {y}'.format(x=x_pos, y=y_peaks[i])
                 plt.text(x_pos, y_pos, peak_label)
 
         # ----- PLOT integration -----
