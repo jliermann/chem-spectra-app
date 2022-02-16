@@ -121,6 +121,51 @@ class NIComposer(BaseComposer):
             '$$ === CHEMSPECTRA SIMULATION ===\n',
             '##$CSSIMULATIONPEAKS=\n',
         ]
+    
+    def __gen_header_cyclic_voltammetry(self):
+        return [
+            '$$ === CHEMSPECTRA CYCLIC VOLTAMMETRY ===\n',
+        ]
+
+    def gen_cyclic_voltammetry_ratio(self):
+        content = '##$CSCYCLICVOLTAMMETRYRATIO=\n'
+        if self.core.is_cyclic_volta:
+            y_peaks = []
+            if self.core.edit_peaks:
+                y_peaks = self.core.edit_peaks['y']
+            elif self.core.auto_peaks:
+                y_peaks = self.core.auto_peaks['y']
+
+            x_max = np.max(self.core.xs)
+            y_max_peak, y_min_peak = np.max(y_peaks), np.min(y_peaks)
+
+            arr_max_x_indices = np.where(self.core.xs == x_max)
+            if (arr_max_x_indices[0][0]):
+                idx = arr_max_x_indices[0][0]
+                y_pecker = self.core.ys[idx]
+
+                #calculate ratio
+                first_expr = abs(y_min_peak) / abs(y_max_peak)
+                second_expr = 0.485 * abs(y_pecker) / abs(y_max_peak)
+                ratio = first_expr + second_expr + 0.086
+                content = '##$CSCYCLICVOLTAMMETRYRATIO={ratio}\n'.format(ratio=ratio)
+        return content
+    
+    def gen_cyclic_voltammetry_peak_to_peak_separate(self):
+        content = '##$CSCYCLICVOLTAMMETRYDETALEP=\n'
+        if self.core.is_cyclic_volta:
+            x_peaks = []
+            if self.core.edit_peaks:
+                x_peaks = self.core.edit_peaks['x']
+            elif self.core.auto_peaks:
+                x_peaks = self.core.auto_peaks['x']
+
+            x_max_peak, x_min_peak = np.max(x_peaks), np.min(x_peaks)
+
+            delta = abs(x_max_peak - x_min_peak)
+            content = '##$CSCYCLICVOLTAMMETRYDETALEP={delta}\n'.format(delta=delta)
+                
+        return content
 
     def __compose(self):
         meta = []
@@ -137,6 +182,9 @@ class NIComposer(BaseComposer):
         meta.extend(self.gen_mpy_peaks_info())
         meta.extend(self.__gen_header_simulation())
         meta.extend(self.gen_simulation_info())
+        meta.extend(self.__gen_header_cyclic_voltammetry())
+        meta.extend(self.gen_cyclic_voltammetry_ratio())
+        meta.extend(self.gen_cyclic_voltammetry_peak_to_peak_separate())
         meta.extend(self.gen_ending())
 
         meta.extend(self.gen_headers_peaktable_edit())
