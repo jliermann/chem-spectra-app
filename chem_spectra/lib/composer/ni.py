@@ -128,7 +128,7 @@ class NIComposer(BaseComposer):
         ]
 
     def gen_cyclic_voltammetry_ratio(self):
-        content = '##$CSCYCLICVOLTAMMETRYRATIO=\n'
+        content = '##$CSCYCLICVOLTAMMETRYIRATIO=\n'
         if self.core.is_cyclic_volta:
             y_peaks = []
             if self.core.edit_peaks:
@@ -148,11 +148,11 @@ class NIComposer(BaseComposer):
                 first_expr = abs(y_min_peak) / abs(y_max_peak)
                 second_expr = 0.485 * abs(y_pecker) / abs(y_max_peak)
                 ratio = first_expr + second_expr + 0.086
-                content = '##$CSCYCLICVOLTAMMETRYRATIO={ratio}\n'.format(ratio=ratio)
+                content = '##$CSCYCLICVOLTAMMETRYIRATIO={ratio}\n'.format(ratio=ratio)
         return content
     
     def gen_cyclic_voltammetry_peak_to_peak_separate(self):
-        content = '##$CSCYCLICVOLTAMMETRYDETALEP=\n'
+        content = '##$CSCYCLICVOLTAMMETRYDELTAEP=\n'
         if self.core.is_cyclic_volta:
             x_peaks = []
             if self.core.edit_peaks:
@@ -163,7 +163,7 @@ class NIComposer(BaseComposer):
             x_max_peak, x_min_peak = np.max(x_peaks), np.min(x_peaks)
 
             delta = abs(x_max_peak - x_min_peak)
-            content = '##$CSCYCLICVOLTAMMETRYDETALEP={delta}\n'.format(delta=delta)
+            content = '##$CSCYCLICVOLTAMMETRYDELTAEP={delta}\n'.format(delta=delta)
                 
         return content
 
